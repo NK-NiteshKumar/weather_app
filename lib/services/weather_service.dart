@@ -1,3 +1,4 @@
+// weather_service.dart
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -10,36 +11,38 @@ class WeatherService {
 
   WeatherService(this.apiKey);
 
-  Future<Weather> getWeather(String cityName) async {
-    final response = await http
-        .get(Uri.parse('$BASE_URL?q=$cityName&appid=$apiKey&units=metric'));
+  Future<Weather> getWeather(double latitude, double longitude) async {
+    final response = await http.get(Uri.parse(
+        '$BASE_URL?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric'));
 
     if (response.statusCode == 200) {
       return Weather.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Error getting weather for city: $cityName');
+      throw Exception('Error getting weather for the provided coordinates');
     }
   }
 
-  Future<String> getCurrentCity() async {
-
-    //get permission from user
+  Future<Map<String, dynamic>> getCurrentLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
-    if(permission == LocationPermission.denied) {
+    if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
 
-    //fetch from current location
     Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high
+      desiredAccuracy: LocationAccuracy.high,
     );
 
-    //convert the location into a placemark objects
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
 
-    //extract the city name from the first placement
-    String? city = placemarks[0].locality;
+    String? city = placemarks.isNotEmpty ? placemarks[0].locality : null;
+    double latitude = position.latitude;
+    double longitude = position.longitude;
 
-    return city ?? "";
+    return {
+      'cityName': city,
+      'latitude': latitude,
+      'longitude': longitude,
+    };
   }
 }
