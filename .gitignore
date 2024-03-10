@@ -41,3 +41,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+/lib/services/city_id.dart
+/lib/services/alternate_service.dart
+/lib/pages/page2.dart
+/lib/pages/alternate_page.dart
