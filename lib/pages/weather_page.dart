@@ -1,4 +1,6 @@
 // weather_page.dart
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, avoid_print
+
 import "package:flutter/material.dart";
 import "package:lottie/lottie.dart";
 import "package:weather_app/models/weather_model.dart";
@@ -63,18 +65,47 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFDEDEDE),
+      appBar: AppBar(
+        backgroundColor: Color(0xFFDEDEDE),
+      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(_weather?.cityName ?? "loading city..."),
-
-            Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
-
-            Text('${_weather?.temperature.round()}°C'),
-
-            Text(_weather?.mainCondition ?? ""),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.location_pin,
+                size: 26,
+                color: Colors.grey[700],
+              ),
+              const SizedBox(height: 15,),
+              Text(
+                _weather?.cityName.toUpperCase() ?? "loading city...",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF777777),
+                ),
+              ),
+              const SizedBox(height: 100,),
+              Lottie.asset(
+                getWeatherAnimation(_weather?.mainCondition),
+                height: 200,
+              ),
+              const SizedBox(height: 100,),
+              Text(
+                '${_weather?.temperature.round()}°',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF363636),
+                ),
+              ),
+          
+              // Text(_weather?.mainCondition ?? ""),
+            ],
+          ),
         ),
       ),
     );

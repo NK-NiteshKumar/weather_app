@@ -1,4 +1,6 @@
 // weather_service.dart
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
